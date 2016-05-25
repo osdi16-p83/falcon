@@ -1,0 +1,45 @@
+#!/bin/bash
+
+if [ -f ~/.bashrc ]; then
+  source ~/.bashrc
+fi
+
+cd $RDMA_ROOT/apps/clamav
+mkdir database
+
+CLAM_VER=0.99.1
+if [ ! -f clamav-$CLAM_VER.tar.gz ]; then
+    wget https://www.clamav.net/downloads/production/clamav-$CLAM_VER.tar.gz
+fi
+
+tar xzf clamav-$CLAM_VER.tar.gz
+
+cd clamav-$CLAM_VER
+
+./configure --prefix=$RDMA_ROOT/apps/clamav/install --with-dbdir=$RDMA_ROOT/apps/clamav/database
+make -j
+make install
+
+cd $RDMA_ROOT/apps/clamav
+
+sed '/Example/d' install/etc/freshclam.conf.sample > freshclam.conf
+sed '/Example/d' install/etc/clamd.conf.sample > clamd.conf
+
+echo "DatabaseDirectory $RDMA_ROOT/apps/clamav/database" >> freshclam.conf
+echo "LogFile $RDMA_ROOT/apps/clamav/server.log" >> clamd.conf
+echo "DatabaseDirectory $RDMA_ROOT/apps/clamav/database" >> clamd.conf
+echo "TCPSocket 3310" >> clamd.conf
+echo "TCPAddr 127.0.0.1" >> clamd.conf
+echo "LogVerbose yes" >> clamd.conf
+echo "Foreground yes" >> clamd.conf
+
+./install/bin/freshclam --config-file=./freshclam.conf
+
+mv ./install/sbin/clamd ./install/sbin/clamd-server
+
+cd ..
+
+scp -r ./clamav $LOGNAME@$(cat $RDMA_ROOT/apps/env/remote_host1):$RDMA_ROOT/apps/
+scp -r ./clamav $LOGNAME@$(cat $RDMA_ROOT/apps/env/remote_host2):$RDMA_ROOT/apps/
+scp -r ./clamav $LOGNAME@$(cat $RDMA_ROOT/apps/env/test_host):$RDMA_ROOT/apps/
+

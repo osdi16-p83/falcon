@@ -1,0 +1,20 @@
+SET: 0.00SET: 20860.56SET: 20820.36SET: 20826.90SET: 20837.16====== SET ======
+  25000 requests completed in 1.20 seconds
+  8 parallel clients
+  3 bytes payload
+  keep alive: 1
+
+99.97% <= 1 milliseconds
+100.00% <= 1 milliseconds
+20815.99 requests per second
+
+GET: 19510.64GET: 20643.10GET: 20780.62GET: 20996.24GET: 20809.93====== GET ======
+  25000 requests completed in 1.20 seconds
+  8 parallel clients
+  3 bytes payload
+  keep alive: 1
+
+100.00% <= 0 milliseconds
+20781.38 requests per second
+
+

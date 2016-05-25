@@ -1,0 +1,56 @@
+#! /bin/bash
+bash db_delete.sh
+ssh hkucs@10.22.1.1  "killall -9 clamd-server"
+ssh hkucs@10.22.1.2  "killall -9 clamd-server"
+ssh hkucs@10.22.1.3  "killall -9 clamd-server"
+ssh hkucs@10.22.1.1  "sed -i '/127.0.0.1/{n;s/.*/        port       = 3310;/}' $RDMA_ROOT/RDMA/target/nodes.local.cfg  "
+ssh hkucs@10.22.1.2  "sed -i '/127.0.0.1/{n;s/.*/        port       = 3310;/}' $RDMA_ROOT/RDMA/target/nodes.local.cfg  "
+ssh hkucs@10.22.1.3  "sed -i '/127.0.0.1/{n;s/.*/        port       = 3310;/}' $RDMA_ROOT/RDMA/target/nodes.local.cfg  "
+ssh hkucs@10.22.1.1  "sed -i '/check_output/c     check_output = 0;' $RDMA_ROOT/RDMA/target/nodes.local.cfg  "
+ssh hkucs@10.22.1.2  "sed -i '/check_output/c     check_output = 0;' $RDMA_ROOT/RDMA/target/nodes.local.cfg  "
+ssh hkucs@10.22.1.3  "sed -i '/check_output/c     check_output = 0;' $RDMA_ROOT/RDMA/target/nodes.local.cfg  "
+ssh -f hkucs@10.22.1.1  "env node_id=0  LD_LIBRARY_PATH=$RDMA_ROOT/RDMA/.local/lib  cfg_path=$RDMA_ROOT/RDMA/target/nodes.local.cfg LD_PRELOAD=$RDMA_ROOT/RDMA/target/interpose.so $RDMA_ROOT/apps/clamav/install/sbin/clamd-server --config-file=$RDMA_ROOT/apps/clamav/clamd.conf"  
+sleep 2 
+ssh -f hkucs@10.22.1.2  "env node_id=1  LD_LIBRARY_PATH=$RDMA_ROOT/RDMA/.local/lib  cfg_path=$RDMA_ROOT/RDMA/target/nodes.local.cfg LD_PRELOAD=$RDMA_ROOT/RDMA/target/interpose.so $RDMA_ROOT/apps/clamav/install/sbin/clamd-server --config-file=$RDMA_ROOT/apps/clamav/clamd.conf" 
+sleep 2 
+ssh -f hkucs@10.22.1.3  "env node_id=2  LD_LIBRARY_PATH=$RDMA_ROOT/RDMA/.local/lib  cfg_path=$RDMA_ROOT/RDMA/target/nodes.local.cfg LD_PRELOAD=$RDMA_ROOT/RDMA/target/interpose.so $RDMA_ROOT/apps/clamav/install/sbin/clamd-server --config-file=$RDMA_ROOT/apps/clamav/clamd.conf" 
+sleep 5 
+skip_client=false
+local_pid=$(ssh hkucs@10.22.1.1 pidof $RDMA_ROOT/apps/clamav/install/sbin/clamd-server | wc -l)
+if [ "$local_pid" == "1" ]; then
+echo clamav in localhost is running
+echo -e "\n"
+else
+echo clamav in localhost is breaking down
+echo -e "\n"
+skip_client=true
+fi
+remote1_pid=$(ssh hkucs@10.22.1.2 pidof $RDMA_ROOT/apps/clamav/install/sbin/clamd-server | wc -l)
+if [ "$remote1_pid" == "1" ]; then
+echo clamav in remote_hostone is running
+echo -e "\n"
+else
+echo clamav in remote_hostone is breaking down
+echo -e "\n"
+skip_client=true
+fi
+remote2_pid=$(ssh hkucs@10.22.1.3 pidof $RDMA_ROOT/apps/clamav/install/sbin/clamd-server | wc -l)
+if [ "$remote2_pid" == "1" ]; then
+echo clamav in remote_hosttwo is running
+echo -e "\n"
+else
+echo clamav in remote_hosttwo is breaking down
+echo -e "\n"
+skip_client=true
+fi
+sleep 10
+if [ "$skip_client" = "true" ]; then
+echo "Skip benchmark and kill all servers and restart again"
+else
+$RDMA_ROOT/apps/clamav/install/bin/clamdscan --config-file=$RDMA_ROOT/apps/clamav/clamd.conf -m $RDMA_ROOT  > clamav-hook_output_$1
+sleep 5 
+fi
+ssh hkucs@10.22.1.1  "killall -9 clamd-server"
+ssh hkucs@10.22.1.2  "killall -9 clamd-server"
+ssh hkucs@10.22.1.3  "killall -9 clamd-server"
+sleep 30

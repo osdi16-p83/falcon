@@ -1,0 +1,8 @@
+sysbench 0.4.12:  multi-threaded system evaluation benchmark
+
+No DB drivers specified, using mysql
+FATAL: unable to connect to MySQL server, aborting...
+FATAL: error 1130: Host 'heming-server1.cs.hku.hk' is not allowed to connect to this MySQL server
+ALERT: Error: failed to determine table 'sbtest' type!
+ALERT: MySQL error: Host 'heming-server1.cs.hku.hk' is not allowed to connect to this MySQL server
+FATAL: failed to get database capabilities!
