@@ -5,3 +5,5 @@ OS: Ubuntu 14.04.02 64bit.
 ## How to run
 ### Install the dependencies for the program
 Use $RDMA_ROOT/RDMA/mk to download and install the dependencies for the program.
+### Install the applications
+We have prepared all the Makefiles for you in each application's directory.
