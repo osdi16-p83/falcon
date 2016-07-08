@@ -1,7 +1,7 @@
 # Falcon
 This project combines RDMA and Paxos.
 The initial result can be found [here](https://docs.google.com/spreadsheets/d/1XFwAh-SRHdBxu_PfRj2TiUBRuhfW-YC_pPDOC-TFdho/edit?usp=sharing).  
-After May 10th, we did more **scalability testing** and you may check it  [here](https://docs.google.com/spreadsheets/d/1rHpv_gA_SS8XpS4sq5aLFjr_ztEPhTUH-r-1fR1_u60/edit?usp=sharing).
+After May 10th, we conducted more **scalability evaluation** and you may check it  [here](https://docs.google.com/spreadsheets/d/1rHpv_gA_SS8XpS4sq5aLFjr_ztEPhTUH-r-1fR1_u60/edit?usp=sharing).
   
 OS: Ubuntu 14.04.02 64bit.
 ## How to run
