@@ -1,7 +1,7 @@
 # Falcon
 This project combines RDMA and Paxos.
-The initial result can be found [here](https://docs.google.com/spreadsheets/d/1XFwAh-SRHdBxu_PfRj2TiUBRuhfW-YC_pPDOC-TFdho/edit?usp=sharing).  
-After May 10th, we conducted more **scalability evaluations** and you may the result  [here](https://docs.google.com/spreadsheets/d/1rHpv_gA_SS8XpS4sq5aLFjr_ztEPhTUH-r-1fR1_u60/edit?usp=sharing). When cluster size varies from 3 to 17 nodes, the consensus latency increases merely by 16%~45%.
+<!---The initial result can be found [here](https://docs.google.com/spreadsheets/d/1XFwAh-SRHdBxu_PfRj2TiUBRuhfW-YC_pPDOC-TFdho/edit?usp=sharing).  
+After May 10th, we conducted more **scalability evaluations** and you may the result  [here](https://docs.google.com/spreadsheets/d/1rHpv_gA_SS8XpS4sq5aLFjr_ztEPhTUH-r-1fR1_u60/edit?usp=sharing). When cluster size varies from 3 to 17 nodes, the consensus latency increases merely by 16%~45%.--->
   
 OS: Ubuntu 14.04.02 64bit.
 ## How to run
